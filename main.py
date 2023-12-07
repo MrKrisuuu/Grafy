@@ -3,6 +3,9 @@ from start_graphs import *
 from productions import *
 
 
-G = create_graph_4()
-P1(G)
+G = test_start()
+draw_graph(G)
+P1.apply(G)
+draw_graph(G)
+P2.apply(G)
 draw_graph(G)

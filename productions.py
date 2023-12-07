@@ -1,19 +1,19 @@
-import networkx as nx
-
+from networkx.algorithms.isomorphism import ISMAGS, GraphMatcher
 from Node import NodeV, NodeE, NodeQ
 from helpers import find_main_nodes, find_hanging_nodes, find_edges, find_nodes, cut_edge, find_hyperedge, add_node, add_edge, add_hyperedge
 from start_graphs import *
+from utils import draw_graph
 
-
-def P(G):
-    main_nodes = find_main_nodes(G)
-    hanging_nodes = find_hanging_nodes(G, main_nodes)
+def P(G, subgraf):
+    main_nodes = find_main_nodes(subgraf)
+    hanging_nodes = find_hanging_nodes(subgraf, main_nodes)
     for node in hanging_nodes:
         G.nodes[node]["h"] = False
         node.h = False
-    edges = find_edges(G)
+    edges = find_edges(subgraf)
     new_nodes = []
     new_qs = {}
+
     for edge in edges:
         (v1, v2) = find_nodes(G, edge)
         if v1 in hanging_nodes or v2 in hanging_nodes:
@@ -39,7 +39,7 @@ def P(G):
             else:
                 new_qs[v2] = [new_v]
 
-    q = find_hyperedge(G)
+    q = find_hyperedge(subgraf)
     G.remove_node(q)
 
     middle_v = NodeV(q.x, q.y, False)
@@ -73,19 +73,17 @@ def node_match(n1, n2):
         return n1["r"] == n2["r"]
 
 
-def P1(G):
-    # G.remove_node(list(G.nodes)[0])
-    # list(G.nodes)[0].h = True
-    # G.nodes[(list(G.nodes)[0])]["h"] = True
-    if nx.is_isomorphic(G, get_P1(), node_match=node_match):
-        P(G)
-    else:
-        raise Exception("Wrong graph!")
+class Production:
+    def __init__(self, left):
+        self.left = left
 
+    def apply(self, graph):
+        matcher = GraphMatcher(graph, self.left, node_match=node_match)
+        for subgraph_nodes in matcher.subgraph_isomorphisms_iter():
+            isomorphic_subgraph = graph.subgraph(subgraph_nodes)
+            P(graph, isomorphic_subgraph)
+            return True
+        return False
 
-def P2(G):
-    if nx.is_isomorphic(G, get_P2(), node_match=node_match):
-        P(G)
-    else:
-        raise Exception("Wrong graph!")
-
+P1 = Production(get_P1_left())
+P2 = Production(get_P2_left())
