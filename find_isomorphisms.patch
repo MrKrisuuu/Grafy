@@ -1,0 +1,215 @@
+Subject: [PATCH] find isomorphisms
+---
+Index: examples.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/examples.py b/examples.py
+--- a/examples.py	(revision 307da830b0e473f12c5561d92b18095b554bb69a)
++++ b/examples.py	(revision 246cbd0909199e391f3c3d292e7239d5bdac5468)
+@@ -6,10 +6,6 @@
+ 
+ 
+ def create_graph_4():
+-    # v1 = NodeV(random(), random(), False)
+-    # v2 = NodeV(random(), -random(), False)
+-    # v3 = NodeV(-random(), -random(), False)
+-    # v4 = NodeV(-random(), random(), False)
+ 
+     v1 = NodeV(1, 1, False)
+     v2 = NodeV(1, 0, False)
+@@ -23,10 +19,10 @@
+     add_node(G, v3)
+     add_node(G, v4)
+ 
+-    add_edge(G, v1, v2, False)
++    add_edge(G, v1, v2, True)
+     add_edge(G, v2, v3, True)
+-    add_edge(G, v3, v4, False)
+-    add_edge(G, v4, v1, False)
++    add_edge(G, v3, v4, True)
++    add_edge(G, v4, v1, True)
+ 
+     add_hyperedge(G, [v1, v2, v3, v4], True)
+ 
+@@ -50,12 +46,12 @@
+     add_node(G, v5)
+     add_node(G, v6)
+ 
+-    add_edge(G, v1, v2, False)
+-    add_edge(G, v2, v3, False)
+-    add_edge(G, v3, v4, False)
+-    add_edge(G, v4, v5, False)
+-    add_edge(G, v5, v6, False)
+-    add_edge(G, v6, v1, False)
++    add_edge(G, v1, v2, True)
++    add_edge(G, v2, v3, True)
++    add_edge(G, v3, v4, True)
++    add_edge(G, v4, v5, True)
++    add_edge(G, v5, v6, True)
++    add_edge(G, v6, v1, True)
+ 
+     add_hyperedge(G, [v1, v2, v3, v4, v5, v6], True)
+ 
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	(revision 307da830b0e473f12c5561d92b18095b554bb69a)
++++ b/main.py	(revision 246cbd0909199e391f3c3d292e7239d5bdac5468)
+@@ -3,6 +3,9 @@
+ from productions import *
+ 
+ 
+-G = create_graph_4()
+-P1(G)
++G = test_start()
++draw_graph(G)
++P1.apply(G)
++draw_graph(G)
++P2.apply(G)
+ draw_graph(G)
+\ No newline at end of file
+Index: productions.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/productions.py b/productions.py
+--- a/productions.py	(revision 307da830b0e473f12c5561d92b18095b554bb69a)
++++ b/productions.py	(revision 246cbd0909199e391f3c3d292e7239d5bdac5468)
+@@ -1,19 +1,19 @@
+-import networkx as nx
+-
++from networkx.algorithms.isomorphism import ISMAGS, GraphMatcher
+ from Node import NodeV, NodeE, NodeQ
+ from helpers import find_main_nodes, find_hanging_nodes, find_edges, find_nodes, cut_edge, find_hyperedge, add_node, add_edge, add_hyperedge
+ from start_graphs import *
++from utils import draw_graph
+ 
+-
+-def P(G):
+-    main_nodes = find_main_nodes(G)
+-    hanging_nodes = find_hanging_nodes(G, main_nodes)
++def P(G, subgraf):
++    main_nodes = find_main_nodes(subgraf)
++    hanging_nodes = find_hanging_nodes(subgraf, main_nodes)
+     for node in hanging_nodes:
+         G.nodes[node]["h"] = False
+         node.h = False
+-    edges = find_edges(G)
++    edges = find_edges(subgraf)
+     new_nodes = []
+     new_qs = {}
++
+     for edge in edges:
+         (v1, v2) = find_nodes(G, edge)
+         if v1 in hanging_nodes or v2 in hanging_nodes:
+@@ -39,7 +39,7 @@
+             else:
+                 new_qs[v2] = [new_v]
+ 
+-    q = find_hyperedge(G)
++    q = find_hyperedge(subgraf)
+     G.remove_node(q)
+ 
+     middle_v = NodeV(q.x, q.y, False)
+@@ -73,19 +73,17 @@
+         return n1["r"] == n2["r"]
+ 
+ 
+-def P1(G):
+-    # G.remove_node(list(G.nodes)[0])
+-    # list(G.nodes)[0].h = True
+-    # G.nodes[(list(G.nodes)[0])]["h"] = True
+-    if nx.is_isomorphic(G, get_P1(), node_match=node_match):
+-        P(G)
+-    else:
+-        raise Exception("Wrong graph!")
++class Production:
++    def __init__(self, left):
++        self.left = left
+ 
++    def apply(self, graph):
++        matcher = GraphMatcher(graph, self.left, node_match=node_match)
++        for subgraph_nodes in matcher.subgraph_isomorphisms_iter():
++            isomorphic_subgraph = graph.subgraph(subgraph_nodes)
++            P(graph, isomorphic_subgraph)
++            return True
++        return False
+ 
+-def P2(G):
+-    if nx.is_isomorphic(G, get_P2(), node_match=node_match):
+-        P(G)
+-    else:
+-        raise Exception("Wrong graph!")
+-
++P1 = Production(get_P1_left())
++P2 = Production(get_P2_left())
+Index: start_graphs.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/start_graphs.py b/start_graphs.py
+--- a/start_graphs.py	(revision 307da830b0e473f12c5561d92b18095b554bb69a)
++++ b/start_graphs.py	(revision 246cbd0909199e391f3c3d292e7239d5bdac5468)
+@@ -1,17 +1,51 @@
++import networkx as nx
++
+ from examples import create_graph_4, create_graph_6
+-from helpers import cut_edge
++from Node import NodeV, NodeE, NodeQ
++from helpers import add_edge, add_hyperedge, add_node, cut_edge
++
++def test_start():
++    v0 = NodeV(0, 1, False)
++    v1 = NodeV(1, 1, False)
++    v2 = NodeV(2, 1, False)
++    v3 = NodeV(2, 0, False)
++    v4 = NodeV(1, 0, False)
++    v5 = NodeV(0, 0, False)
++
++    G = nx.Graph()
++
++    add_node(G, v0)
++    add_node(G, v1)
++    add_node(G, v2)
++    add_node(G, v3)
++    add_node(G, v4)
++    add_node(G, v5)
++
++    add_edge(G, v0, v1, True)
++    add_edge(G, v1, v2, True)
++    add_edge(G, v2, v3, True)
++    add_edge(G, v3, v4, True)
++    add_edge(G, v4, v5, True)
++    add_edge(G, v5, v0, True)
++    add_edge(G, v1, v4, False)
+ 
++    add_hyperedge(G, [v0, v1, v4, v5], True)
++    add_hyperedge(G, [v1, v2, v3, v4], True)
+ 
+-def get_P1():
++    return G
++
++
++def get_P1_left():
+     G = create_graph_4()
+     return G
+ 
+ 
+-def get_P2():
++def get_P2_left():
+     G = create_graph_4()
+     v1 = list(G.nodes)[0]
+     v2 = list(G.nodes)[1]
+     e = list(G.nodes)[4]
+     v = cut_edge(G, v1, v2, e)
+     v.h = True
++    G.nodes[v]['h'] = True
+     return G
+\ No newline at end of file
