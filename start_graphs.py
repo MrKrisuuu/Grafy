@@ -4,6 +4,7 @@ from examples import create_graph_4, create_graph_6
 from Node import NodeV, NodeE, NodeQ
 from helpers import add_edge, add_hyperedge, add_node, cut_edge
 
+
 def test_start():
     v0 = NodeV(0, 1, False)
     v1 = NodeV(1, 1, False)

@@ -1,8 +1,7 @@
 from networkx.algorithms.isomorphism import ISMAGS, GraphMatcher
-from Node import NodeV, NodeE, NodeQ
 from helpers import find_main_nodes, find_hanging_nodes, find_edges, find_nodes, cut_edge, find_hyperedge, add_node, add_edge, add_hyperedge
 from start_graphs import *
-from utils import draw_graph
+
 
 def P(G, subgraf):
     main_nodes = find_main_nodes(subgraf)
@@ -84,6 +83,7 @@ class Production:
             P(graph, isomorphic_subgraph)
             return True
         return False
+
 
 P1 = Production(get_P1_left())
 P2 = Production(get_P2_left())
