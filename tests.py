@@ -1,15 +1,19 @@
 import random
 
 from Node import NodeV, NodeE, NodeQ
+from utils import draw_graph
 
 
 def main_test(get_left, P):
     G = get_left()
+    draw_graph(G)
     if P.apply(G):
         print(f"main_test OK")
+        draw_graph(G)
         return 1
     else:
         print(f"main_test FAILED")
+        draw_graph(G)
         return 0
 
 

@@ -45,8 +45,8 @@ def get_P2_left():
     G = create_graph_4()
     v1 = list(G.nodes)[0]
     v2 = list(G.nodes)[1]
-    e = list(G.nodes)[4]
-    v = cut_edge(G, v1, v2, e)
+    e12 = list(G.nodes)[4]
+    v = cut_edge(G, v1, v2, e12)
     v.h = True
     G.nodes[v]['h'] = True
     return G
