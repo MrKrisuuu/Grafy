@@ -50,3 +50,24 @@ def get_P2_left():
     v.h = True
     G.nodes[v]['h'] = True
     return G
+
+def get_P9_left():
+    G = create_graph_6()
+    return G
+
+def get_P10_left():
+    G = create_graph_6()
+    v1 = list(G.nodes)[0]
+    v2 = list(G.nodes)[1]
+    e12 = list(G.nodes)[6]
+    v = cut_edge(G, v1, v2, e12)
+    v.h = True
+    G.nodes[v]['h'] = True
+    return G
+
+def get_P21_left():
+    G = create_graph_6()
+    q = list(G.nodes)[len(G.nodes)-1]
+    q.r = False
+    G.nodes[q]['r'] = False
+    return G
