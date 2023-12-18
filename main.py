@@ -23,3 +23,21 @@ G = create_graph_6()
 draw_graph(G)
 P(G, G)
 draw_graph(G)
+
+G = get_P3_left()
+draw_graph(G)
+P3.apply(G)
+draw_graph(G)
+
+print("P3")
+do_tests(get_P3_left, P3)
+print()
+
+G = get_P4_left()
+draw_graph(G)
+P4.apply(G)
+draw_graph(G)
+
+print("P4")
+do_tests(get_P4_left, P4)
+print()

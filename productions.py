@@ -87,3 +87,5 @@ class Production:
 
 P1 = Production(get_P1_left())
 P2 = Production(get_P2_left())
+P3 = Production(get_P3_left())
+P4 = Production(get_P4_left())
