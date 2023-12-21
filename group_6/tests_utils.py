@@ -101,7 +101,7 @@ def get_node_inserting_func_for_test(graph, previous_node_id, divider, offset):
     return lambda: cut_edge(graph, previous_node, following_node, edge_to_break)
 
 
-def get_graph_with_hanging_nodes_for_test(result_graph, divider, offset, edges):
+def add_hanging_nodes_to_graph_for_test(result_graph, divider, offset, edges):
     inserting_funcs = [get_node_inserting_func_for_test(result_graph, e, divider, offset) for e in edges]
     for f in inserting_funcs:
         new_node = f()
