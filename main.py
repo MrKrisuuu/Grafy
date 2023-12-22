@@ -44,5 +44,11 @@ print("P4")
 do_tests(get_P4_left, P4)
 print()
 
+G = get_P7_left()
+draw_graph(G)
+P7.apply(G)
+draw_graph(G)
+
 print("P7")
 do_tests(get_P7_left, P7, tests=DEFAULT_MARK_TESTS)
+print()
