@@ -74,11 +74,26 @@ def change_r_test(get_left, P):
         return 0
 
 
-def do_tests(get_left, P):
+def change_r_reverse_test(get_left, P):
+    G = get_left()
+    for hyperedge in G.nodes:
+        if isinstance(hyperedge, NodeQ):
+            hyperedge.r = True
+            G.nodes[hyperedge]["r"] = True
+    if not P.apply(G):
+        print(f"change_r_test OK")
+        return 1
+    else:
+        print(f"change_r_test FAILED")
+        return 0
+
+
+DEFAULT_TESTS = (main_test, remove_vertex_test, remove_edge_test, check_coordinates_test, change_r_test)
+DEFAULT_MARK_TESTS = (main_test, remove_vertex_test, remove_edge_test, check_coordinates_test, change_r_reverse_test)
+
+
+def do_tests(get_left, P, tests=DEFAULT_TESTS):
     OK = 0
-    OK += main_test(get_left, P)
-    OK += remove_vertex_test(get_left, P)
-    OK += remove_edge_test(get_left, P)
-    OK += check_coordinates_test(get_left, P)
-    OK += change_r_test(get_left, P)
-    print(f"{OK}/5")
+    for test in tests:
+        OK += test(get_left, P)
+    print(f"{OK}/{len(tests)}")
