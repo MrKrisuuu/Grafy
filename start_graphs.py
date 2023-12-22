@@ -50,3 +50,66 @@ def get_P2_left():
     v.h = True
     G.nodes[v]['h'] = True
     return G
+
+
+def get_P3_left():
+    def cut(ver1, ver2, edge):
+        v = cut_edge(G, ver1, ver2, edge)
+        v.h = True
+        G.nodes[v]['h'] = True
+
+    G = create_graph_4()
+    nodes = list(G.nodes)
+
+    v1 = nodes[2]
+    v2 = nodes[1]
+    v3 = nodes[0]
+    e12 = nodes[5]
+    e23 = nodes[4]
+
+    cut(v1, v2, e12)
+    cut(v2, v3, e23)
+
+    return G
+
+def get_P4_left():
+    def cut(ver1, ver2, edge):
+        v = cut_edge(G, ver1, ver2, edge)
+        v.h = True
+        G.nodes[v]['h'] = True
+
+    G = create_graph_4()
+    nodes = list(G.nodes)
+
+    v1 = nodes[2]
+    v2 = nodes[1]
+    v3 = nodes[0]
+    v4 = nodes[3]
+    e14 = nodes[6]
+    e23 = nodes[4]
+
+    cut(v1, v4, e14)
+    cut(v2, v3, e23)
+
+    return G
+
+def get_P7_left():
+    G = create_graph_4()
+
+    nodes = list(G.nodes)
+    q = next(filter(lambda node: isinstance(node, NodeQ), nodes))
+
+    q.r = False
+    G.nodes[q]["r"] = False
+
+    return G
+
+def mark_target_P7(p7_left):
+    nodes = list(p7_left.nodes)
+    q = next(filter(lambda node: isinstance(node, NodeQ), nodes))
+
+    if q is not None:
+        q.r = True
+        p7_left.nodes[q]["r"] = True
+
+    return q is not None
