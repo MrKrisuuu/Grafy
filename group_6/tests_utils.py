@@ -35,7 +35,6 @@ def create_graph_6_with_subgraph():
     v6 = NodeV(-1, 1, False)
     v7 = NodeV(2, 1, False)
     v8 = NodeV(2, 2, False)
-    v9 = NodeV(-2, 2, False)
 
     G = nx.Graph()
 
@@ -47,7 +46,6 @@ def create_graph_6_with_subgraph():
     add_node(G, v6)
     add_node(G, v7)
     add_node(G, v8)
-    add_node(G, v9)
 
     add_edge(G, v1, v2, True)
     add_edge(G, v2, v3, True)
@@ -58,7 +56,7 @@ def create_graph_6_with_subgraph():
     add_edge(G, v1, v7, False)
     add_edge(G, v8, v1, False)
     add_edge(G, v8, v7, False)
-    add_edge(G, v9, v6, False)
+    add_edge(G, v7, v2, False)
 
     add_hyperedge(G, [v1, v2, v3, v4, v5, v6], True)
 
