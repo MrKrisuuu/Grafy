@@ -84,10 +84,23 @@ class Production:
             return True
         return False
 
+class MarkProduction(Production):
+    def __init__(self, left, mark_target_fun):
+        super().__init__(left)
+        self.mark_target_fun = mark_target_fun
+
+    def apply(self, graph):
+        matcher = GraphMatcher(graph, self.left, node_match=node_match)
+        for subgraph_nodes in matcher.subgraph_isomorphisms_iter():
+            isomorphic_subgraph = graph.subgraph(subgraph_nodes)
+            return self.mark_target_fun(isomorphic_subgraph)
+        return False
+
 
 P1 = Production(get_P1_left())
 P2 = Production(get_P2_left())
-
-
+P3 = Production(get_P3_left())
+P4 = Production(get_P4_left())
+P7 = MarkProduction(get_P7_left(), mark_target_fun=mark_target_P7)
 P9 = Production(get_P9_left())
 P10 = Production(get_P10_left())
