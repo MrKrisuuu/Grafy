@@ -139,7 +139,7 @@ def add_subgraph_elements(result_graph, edges):
 
 
 def create_graph_with_subgraph(hanging_node_ids):
-    res = create_graph_6_with_mixed_edge_labels([i in hanging_node_ids for i in range(6)])
+    res = create_graph_6_with_mixed_edge_labels([i not in hanging_node_ids for i in range(6)])
     res = add_hanging_nodes_to_graph_for_test(res, hanging_node_ids)
     res = add_subgraph_elements(res, hanging_node_ids)
     return res
