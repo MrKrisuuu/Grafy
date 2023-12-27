@@ -104,13 +104,13 @@ def get_P7_left():
 
     return G
 
-def mark_target_P7(p7_left):
-    nodes = list(p7_left.nodes)
+def mark_target_function(graph_left):
+    nodes = list(graph_left.nodes)
     q = next(filter(lambda node: isinstance(node, NodeQ), nodes))
 
     if q is not None:
         q.r = True
-        p7_left.nodes[q]["r"] = True
+        graph_left.nodes[q]["r"] = True
 
     return q is not None
 
@@ -130,7 +130,11 @@ def get_P10_left():
 
 def get_P21_left():
     G = create_graph_6()
-    q = list(G.nodes)[len(G.nodes)-1]
+
+    nodes = list(G.nodes)
+    q = next(filter(lambda node: isinstance(node, NodeQ), nodes))
+
     q.r = False
-    G.nodes[q]['r'] = False
+    G.nodes[q]["r"] = False
+
     return G
