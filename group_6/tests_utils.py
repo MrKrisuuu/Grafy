@@ -90,6 +90,46 @@ def get_subgraph_inserting_func_for_test(graph, previous_node_id, index):
     return f
 
 
+def flip_x(arr):
+    res = [(-x, y) for x, y in arr]
+    res.reverse()
+    return res
+
+
+def flip_y(arr):
+    res = [(x, -y) for x, y in arr]
+    res.reverse()
+    return res
+
+
+def get_subgraph_inserting_func_for_test(graph, previous_node_id, index):
+    previous_node = list(graph.nodes)[previous_node_id]
+    following_node = list(graph.nodes)[(previous_node_id + 1) % 6]
+    cutting_node = find_hanging_nodes(graph, find_main_nodes(graph))[index]
+    new_nodes_coordinates = [[(1.5, 1.5), (2, 1), (2.5, 0.5)],
+                             [(2.5, -0.5), (2, -1), (1.5, -1.5)],
+                             [(1, -2), (0, -2), (-1, -2)]]
+    new_nodes_coordinates += [flip_x(new_nodes_coordinates[1]), flip_x(new_nodes_coordinates[0]), flip_y(new_nodes_coordinates[2])]
+
+    def f():
+        v1 = NodeV(new_nodes_coordinates[previous_node_id][0][0], new_nodes_coordinates[previous_node_id][0][1], False)
+        v2 = NodeV(new_nodes_coordinates[previous_node_id][1][0], new_nodes_coordinates[previous_node_id][1][1], False)
+        v3 = NodeV(new_nodes_coordinates[previous_node_id][2][0], new_nodes_coordinates[previous_node_id][2][1], False)
+        add_node(graph, v1)
+        add_node(graph, v2)
+        add_node(graph, v3)
+
+        add_edge(graph, previous_node, v1, True)
+        add_edge(graph, following_node, v3, True)
+        add_edge(graph, v1, v2, True)
+        add_edge(graph, v2, v3, True)
+        add_edge(graph, cutting_node, v2, False)
+        add_hyperedge(graph, [v1, v2, cutting_node, previous_node], False)
+        add_hyperedge(graph, [v2, v3, following_node, cutting_node], False)
+
+    return f
+
+
 def add_subgraph_elements(result_graph, edges):
     inserting_funcs = [get_subgraph_inserting_func_for_test(result_graph, edges[i], i) for i in
                        range(len(edges))]
