@@ -21,6 +21,7 @@ def compare_graph_elements(test_map, result_map):
         for (key1, value1), (key2, value2) in zip(element.items(), value.items()):
             if key1 == key2:
                 if value1 != value2:
+                    print(key, key1, value1, value2)
                     return False
 
     return True
