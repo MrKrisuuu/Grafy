@@ -1,7 +1,8 @@
-from examples import create_graph_4
-from helpers import cut_edge, add_edge, add_hyperedge, add_node, cut_edge
 import networkx as nx
-from Node import NodeV, NodeE, NodeQ
+
+from Node import NodeV
+from examples import create_graph_4
+from helpers import add_edge, add_hyperedge, add_node, cut_edge
 
 
 def get_P5_left():
@@ -55,8 +56,9 @@ def get_P6_left():
 
     return G
 
+
 def get_P8_left():
-    v1 = NodeV(0, 0, False)  
+    v1 = NodeV(0, 0, False)
     v2 = NodeV(1, 0, False)
     v3 = NodeV(1, 1, False)
     v4 = NodeV(0, 1, False)

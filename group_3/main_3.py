@@ -1,6 +1,6 @@
 from group_3.start_graphs_3 import get_P5_left, get_P6_left
 from productions_3 import P5, P6
-from tests import do_tests
+from tests_3 import do_tests
 from utils import draw_graph
 
 G = get_P5_left()

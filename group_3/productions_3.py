@@ -1,13 +1,13 @@
+from networkx.algorithms.isomorphism import GraphMatcher
+
+from Node import NodeQ
 from group_3.start_graphs_3 import get_P6_left, get_P5_left, get_P8_left
 from productions import Production
-from networkx.algorithms.isomorphism import ISMAGS, GraphMatcher
-from Node import NodeQ
 from productions import node_match
-
-
 
 P5 = Production(get_P5_left())
 P6 = Production(get_P6_left())
+
 
 class P8(Production):
     def __init__(self):
@@ -23,5 +23,6 @@ class P8(Production):
                     node.r = True
             return True
         return False
+
 
 P8 = P8()
