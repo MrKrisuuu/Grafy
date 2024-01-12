@@ -1,9 +1,9 @@
 from networkx.algorithms.isomorphism import ISMAGS, GraphMatcher
 
 from group_6.utils_g6 import create_graph_with_hanging_nodes
-from helpers import find_main_nodes, find_hanging_nodes, find_edges, find_nodes, cut_edge, find_hyperedge, add_node, add_edge, add_hyperedge
+from helpers import find_main_nodes, find_hanging_nodes, find_edges, find_nodes, find_hyperedge
 from start_graphs import *
-from group_6.productions_g6 import P13, P14, P15
+
 
 def P(G, subgraf):
     main_nodes = find_main_nodes(subgraf)
@@ -86,6 +86,7 @@ class Production:
             return True
         return False
 
+
 class MarkProduction(Production):
     def __init__(self, left, mark_target_fun):
         super().__init__(left)
@@ -99,6 +100,23 @@ class MarkProduction(Production):
         return False
 
 
+class P22(Production):
+    def __init__(self):
+        super().__init__(get_P22_left())
+
+    def apply(self, graph):
+        matcher = GraphMatcher(graph, self.left, node_match=node_match)
+        for subgraph_nodes in matcher.subgraph_isomorphisms_iter():
+            isomorphic_subgraph = graph.subgraph(subgraph_nodes)
+            main_nodes = list(filter(lambda node: isinstance(node, NodeQ), list(isomorphic_subgraph.nodes)))
+            for node in main_nodes:
+                if not node.r:
+                    graph.nodes[node]["r"] = True
+                    node.r = True
+            return True
+        return False
+
+
 P1 = Production(get_P1_left())
 P2 = Production(get_P2_left())
 P3 = Production(get_P3_left())
@@ -106,9 +124,12 @@ P4 = Production(get_P4_left())
 P7 = MarkProduction(get_P7_left(), mark_target_fun=mark_target_function)
 P9 = Production(get_P9_left())
 P10 = Production(get_P10_left())
+P11 = Production(get_P11_left())
+P12 = Production(get_P12_left())
 
 P13 = Production(create_graph_with_hanging_nodes([2, 5]))
 P14 = Production(create_graph_with_hanging_nodes([2, 3, 4]))
 P15 = Production(create_graph_with_hanging_nodes([2, 3, 5]))
 
 P21 = MarkProduction(get_P21_left(), mark_target_fun=mark_target_function)
+P22 = P22()
