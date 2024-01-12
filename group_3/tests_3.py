@@ -65,10 +65,3 @@ def check_coordinates_test_P8(get_left, P):
 
 def get_generinc_tests():
     return [main_test, remove_vertex_test, remove_edge_test, change_r_test, add_node_test]
-
-
-def do_tests(get_left, P, tests):
-    passed = 0
-    for test in tests:
-        passed += test(get_left, P)
-    print(f"Passed {passed}/{len(tests)} tests")
