@@ -1,7 +1,9 @@
 from networkx.algorithms.isomorphism import ISMAGS, GraphMatcher
+
+from group_6.utils_g6 import create_graph_with_hanging_nodes
 from helpers import find_main_nodes, find_hanging_nodes, find_edges, find_nodes, cut_edge, find_hyperedge, add_node, add_edge, add_hyperedge
 from start_graphs import *
-
+from group_6.productions_g6 import P13, P14, P15
 
 def P(G, subgraf):
     main_nodes = find_main_nodes(subgraf)
@@ -104,5 +106,9 @@ P4 = Production(get_P4_left())
 P7 = MarkProduction(get_P7_left(), mark_target_fun=mark_target_function)
 P9 = Production(get_P9_left())
 P10 = Production(get_P10_left())
+
+P13 = Production(create_graph_with_hanging_nodes([2, 5]))
+P14 = Production(create_graph_with_hanging_nodes([2, 3, 4]))
+P15 = Production(create_graph_with_hanging_nodes([2, 3, 5]))
 
 P21 = MarkProduction(get_P21_left(), mark_target_fun=mark_target_function)
