@@ -1,3 +1,5 @@
+import networkx as nx
+
 from Node import NodeV, NodeE, NodeQ
 
 
@@ -41,13 +43,19 @@ def find_nodes(G, e):
     return tuple(nodes)
 
 
-def cut_edge(G, v1, v2, edge):
+def cut_edge(G, v1, v2, edge, subgraph=None):
     G.remove_node(edge)
     new_v = NodeV(edge.x, edge.y, not edge.b)
     add_node(G, new_v)
 
     add_edge(G, new_v, v1, edge.b)
     add_edge(G, new_v, v2, edge.b)
+
+    if subgraph:
+        subgraph.remove_node(edge)
+        add_node(subgraph, new_v)
+        add_edge(subgraph, new_v, v1, edge.b)
+        add_edge(subgraph, new_v, v2, edge.b)
 
     return new_v
 
@@ -80,4 +88,3 @@ def add_hyperedge(G, nodes, r):
     add_node(G, hyperedge)
     for node in nodes:
         G.add_edge(hyperedge, node)
-

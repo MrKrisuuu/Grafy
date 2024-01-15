@@ -101,6 +101,11 @@ def get_P7_left():
 
     nodes = list(G.nodes)
     q = next(filter(lambda node: isinstance(node, NodeQ), nodes))
+    v_all = list(filter(lambda node: isinstance(node, NodeV), nodes))
+
+    for v in v_all:
+        v.matters = False
+        G.nodes[v]['matters'] = False
 
     q.r = False
     G.nodes[q]["r"] = False
@@ -149,6 +154,12 @@ def get_P21_left():
     nodes = list(G.nodes)
     q = next(filter(lambda node: isinstance(node, NodeQ), nodes))
 
+    v_all = list(filter(lambda node: isinstance(node, NodeV), nodes))
+
+    for v in v_all:
+        v.matters = False
+        G.nodes[v]['matters'] = False
+
     q.r = False
     G.nodes[q]["r"] = False
 
@@ -156,15 +167,15 @@ def get_P21_left():
 
 
 def get_P22_left():
-    v1 = NodeV(0, 1, False)  # matches third v from presentation and goes to the right
-    v2 = NodeV(1, 1, False)
-    v3 = NodeV(1, 0, False)
+    v1 = NodeV(0, 1, False, False)  # matches third v from presentation and goes to the right
+    v2 = NodeV(1, 1, False, False)
+    v3 = NodeV(1, 0, False, False)
     v4 = NodeV(0, 0, True)  # this is h5
-    v5 = NodeV(0, -1, False)
-    v6 = NodeV(-1, -1, False)
-    v7 = NodeV(-2, -1, False)
-    v8 = NodeV(-2, 0, False)
-    v9 = NodeV(-2, 1, False)
+    v5 = NodeV(0, -1, False, False)
+    v6 = NodeV(-1, -1, False, False)
+    v7 = NodeV(-2, -1, False, False)
+    v8 = NodeV(-2, 0, False, False)
+    v9 = NodeV(-2, 1, False, False)
 
     G = nx.Graph()
 

@@ -15,7 +15,10 @@ class P8(Production):
 
     def apply(self, graph):
         matcher = GraphMatcher(graph, self.left, node_match=node_match)
-        for subgraph_nodes in matcher.subgraph_isomorphisms_iter():
+        nodes_dict = list(matcher.subgraph_isomorphisms_iter())
+        if len(nodes_dict) == 0:
+            return False
+        for subgraph_nodes in nodes_dict:
             isomorphic_subgraph = graph.subgraph(subgraph_nodes)
             for node in isomorphic_subgraph.nodes:
                 if isinstance(node, NodeQ):

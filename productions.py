@@ -1,8 +1,12 @@
+import networkx as nx
 from networkx.algorithms.isomorphism import ISMAGS, GraphMatcher
 
 from group_6.utils_g6 import create_graph_with_hanging_nodes
 from helpers import find_main_nodes, find_hanging_nodes, find_edges, find_nodes, find_hyperedge
 from start_graphs import *
+from copy import deepcopy
+
+from utils import draw_graph
 
 
 def P(G, subgraf):
@@ -29,7 +33,7 @@ def P(G, subgraf):
                 else:
                     new_qs[v1] = [v2]
         else:
-            new_v = cut_edge(G, v1, v2, edge)
+            new_v = cut_edge(G, v1, v2, edge, subgraf)
             new_nodes.append(new_v)
             if v1 in new_qs:
                 new_qs[v1].append(new_v)
@@ -41,17 +45,26 @@ def P(G, subgraf):
                 new_qs[v2] = [new_v]
 
     q = find_hyperedge(subgraf)
+
     G.remove_node(q)
+    subgraf.remove_node(q)
 
     middle_v = NodeV(q.x, q.y, False)
     add_node(G, middle_v)
+
+    add_node(subgraf, middle_v)
     for node in new_nodes:
         add_edge(G, middle_v, node, False)
+        add_edge(subgraf, middle_v, node, False)
     for node in hanging_nodes:
         add_edge(G, middle_v, node, False)
+        add_edge(subgraf, middle_v, node, False)
 
     for node in main_nodes:
         add_hyperedge(G, [middle_v, node] + new_qs[node], False)
+        add_hyperedge(subgraf, [middle_v, node] + new_qs[node], False)
+
+    return subgraf
 
 
 def node_match(n1, n2):
@@ -65,7 +78,10 @@ def node_match(n1, n2):
         return False
 
     if n1["type"] == "V":
-        return n1["h"] == n2["h"]
+        if n2['matters']:
+            return n1["h"] == n2["h"]
+        else:
+            return True
 
     if n1["type"] == "E":
         return True
@@ -82,8 +98,8 @@ class Production:
         matcher = GraphMatcher(graph, self.left, node_match=node_match)
         for subgraph_nodes in matcher.subgraph_isomorphisms_iter():
             isomorphic_subgraph = graph.subgraph(subgraph_nodes)
-            P(graph, isomorphic_subgraph)
-            return True
+            temp = P(graph, isomorphic_subgraph.copy(as_view=False))
+            return True, temp
         return False
 
 
@@ -96,7 +112,7 @@ class MarkProduction(Production):
         matcher = GraphMatcher(graph, self.left, node_match=node_match)
         for subgraph_nodes in matcher.subgraph_isomorphisms_iter():
             isomorphic_subgraph = graph.subgraph(subgraph_nodes)
-            return self.mark_target_fun(isomorphic_subgraph)
+            return self.mark_target_fun(isomorphic_subgraph), isomorphic_subgraph
         return False
 
 
