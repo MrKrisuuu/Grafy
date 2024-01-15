@@ -65,7 +65,10 @@ def node_match(n1, n2):
         return False
 
     if n1["type"] == "V":
-        return n1["h"] == n2["h"]
+        if n2['matters']:
+            return n1["h"] == n2["h"]
+        else:
+            return True
 
     if n1["type"] == "E":
         return True
