@@ -58,13 +58,13 @@ def get_P6_left():
 
 
 def get_P8_left():
-    v1 = NodeV(0, 0, False)
-    v2 = NodeV(1, 0, False)
-    v3 = NodeV(1, 1, False)
-    v4 = NodeV(0, 1, False)
+    v1 = NodeV(0, 0, False, False)
+    v2 = NodeV(1, 0, False, False)
+    v3 = NodeV(1, 1, False, False)
+    v4 = NodeV(0, 1, False, False)
     v5 = NodeV(1, 0.5, True)
-    v6 = NodeV(2, 0.5, False)
-    v7 = NodeV(2, 1, False)
+    v6 = NodeV(2, 0.5, False, False)
+    v7 = NodeV(2, 1, False, False)
 
     G = nx.Graph()
 
