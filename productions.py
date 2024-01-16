@@ -74,6 +74,26 @@ def node_match(n1, n2):
         return n1["r"] == n2["r"]
 
 
+def node_match_ignoring_h(n1, n2):
+    if len(n1) == 0:
+        raise Exception("Set the dict!")
+
+    if len(n2) == 0:
+        raise Exception("Set the dict!")
+
+    if n1["type"] != n2["type"]:
+        return False
+
+    if n1["type"] == "V":
+        return True
+
+    if n1["type"] == "E":
+        return True
+
+    if n1["type"] == "Q":
+        return n1["r"] == n2["r"]
+
+
 class Production:
     def __init__(self, left):
         self.left = left
@@ -92,9 +112,11 @@ class MarkProduction(Production):
         super().__init__(left)
         self.mark_target_fun = mark_target_fun
 
-    def apply(self, graph):
-        matcher = GraphMatcher(graph, self.left, node_match=node_match)
+    def apply(self, graph, predicate=lambda x: True):
+        matcher = GraphMatcher(graph, self.left, node_match=node_match_ignoring_h)
         for subgraph_nodes in matcher.subgraph_isomorphisms_iter():
+            if not predicate(subgraph_nodes):
+                continue
             isomorphic_subgraph = graph.subgraph(subgraph_nodes)
             return self.mark_target_fun(isomorphic_subgraph)
         return False
