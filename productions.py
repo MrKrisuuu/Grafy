@@ -88,7 +88,7 @@ def node_match_ignoring_h(n1, n2):
         return True
 
     if n1["type"] == "E":
-        return True
+        return n1["marked"] == n2["marked"]
 
     if n1["type"] == "Q":
         return n1["r"] == n2["r"]
@@ -112,11 +112,9 @@ class MarkProduction(Production):
         super().__init__(left)
         self.mark_target_fun = mark_target_fun
 
-    def apply(self, graph, predicate=lambda x: True):
+    def apply(self, graph):
         matcher = GraphMatcher(graph, self.left, node_match=node_match_ignoring_h)
         for subgraph_nodes in matcher.subgraph_isomorphisms_iter():
-            if not predicate(subgraph_nodes):
-                continue
             isomorphic_subgraph = graph.subgraph(subgraph_nodes)
             return self.mark_target_fun(isomorphic_subgraph)
         return False

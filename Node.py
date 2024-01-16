@@ -10,11 +10,12 @@ class NodeV:
 
 
 class NodeE:
-    def __init__(self, v1, v2, b):
+    def __init__(self, v1, v2, b, marked=False):
         self.x = (v1.x + v2.x) / 2
         self.y = (v1.y + v2.y) / 2
         self.b = b
         self.type = "E"
+        self.marked = marked
 
     def __str__(self):
         return f"{self.type}\n{self.b}"
