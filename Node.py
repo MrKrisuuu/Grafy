@@ -1,9 +1,10 @@
 class NodeV:
-    def __init__(self, x, y, h):
+    def __init__(self, x, y, h, marked=False):
         self.x = x
         self.y = y
         self.h = h
         self.type = "V"
+        self.marked = marked
 
     def __str__(self):
         return f"{self.type}\n{self.h}"

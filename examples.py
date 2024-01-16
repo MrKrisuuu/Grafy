@@ -59,7 +59,7 @@ def create_graph_6():
 
 def create_flow_starting_graph():
     outside1 = NodeV(-3, 3, False)
-    outside2 = NodeV(3, 3, False)
+    outside2 = NodeV(3, 3, False, True)
     outside3 = NodeV(3, 0, False)
     outside4 = NodeV(3, -3, False)
     outside5 = NodeV(-3, -3, False)
@@ -89,7 +89,7 @@ def create_flow_starting_graph():
     add_node(G, inside6)
 
     add_edge(G, outside1, outside2, True)
-    add_edge(G, outside2, outside3, True)
+    add_edge(G, outside2, outside3, True, True)
     add_edge(G, outside3, outside4, True)
     add_edge(G, outside4, outside5, True)
     add_edge(G, outside5, outside6, True)

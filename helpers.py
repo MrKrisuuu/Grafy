@@ -45,9 +45,14 @@ def cut_edge(G, v1, v2, edge):
     G.remove_node(edge)
     new_v = NodeV(edge.x, edge.y, not edge.b)
     add_node(G, new_v)
-
-    add_edge(G, new_v, v1, edge.b)
-    add_edge(G, new_v, v2, edge.b)
+    if edge.marked:
+        marked_v = v1 if v1.marked else v2
+        other_v = v2 if v1.marked else v1
+        add_edge(G, new_v, marked_v, edge.b, True)
+        add_edge(G, new_v, other_v, edge.b)
+    else:
+        add_edge(G, new_v, v1, edge.b)
+        add_edge(G, new_v, v2, edge.b)
 
     return new_v
 
@@ -67,8 +72,8 @@ def add_node(G, v):
     G.add_node(v, **v.__dict__)
 
 
-def add_edge(G, v1, v2, b):
-    edge = NodeE(v1, v2, b)
+def add_edge(G, v1, v2, b, marked=False):
+    edge = NodeE(v1, v2, b, marked)
     add_node(G, edge)
     G.add_edge(edge, v1)
     G.add_edge(edge, v2)
