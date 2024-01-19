@@ -73,17 +73,54 @@ def node_match(n1, n2):
     if n1["type"] == "Q":
         return n1["r"] == n2["r"]
 
+def node_match_p7(n1, n2):
+    if len(n1) == 0:
+        raise Exception("Set the dict!")
+
+    if len(n2) == 0:
+        raise Exception("Set the dict!")
+
+    if n1["type"] != n2["type"]:
+        return False
+
+    if n1["type"] == "Q":
+        return n1["r"] == n2["r"]
+
+    return True
+
+
+def node_match_p22(n1, n2):
+    if len(n1) == 0:
+        raise Exception("Set the dict!")
+
+    if len(n2) == 0:
+        raise Exception("Set the dict!")
+
+    if n1["type"] != n2["type"]:
+        return False
+
+    if n1["type"] == "Q":
+        return n1["r"] == n2["r"]
+
+    print("sskjdnkan")
+
+
+    return True
+
 
 class Production:
     def __init__(self, left):
         self.left = left
 
-    def apply(self, graph):
+    def apply(self, graph, node_q=None):
         matcher = GraphMatcher(graph, self.left, node_match=node_match)
         for subgraph_nodes in matcher.subgraph_isomorphisms_iter():
             isomorphic_subgraph = graph.subgraph(subgraph_nodes)
+            if node_q and node_q not in isomorphic_subgraph.nodes:
+                continue
             P(graph, isomorphic_subgraph)
             return True
+
         return False
 
 
@@ -92,10 +129,12 @@ class MarkProduction(Production):
         super().__init__(left)
         self.mark_target_fun = mark_target_fun
 
-    def apply(self, graph):
-        matcher = GraphMatcher(graph, self.left, node_match=node_match)
-        for subgraph_nodes in matcher.subgraph_isomorphisms_iter():
+    def apply(self, graph, node_q=None):
+        matcher = GraphMatcher(graph, self.left, node_match=node_match_p7)
+        for i, subgraph_nodes in enumerate(matcher.subgraph_isomorphisms_iter()):
             isomorphic_subgraph = graph.subgraph(subgraph_nodes)
+            if node_q and node_q not in isomorphic_subgraph.nodes:
+                continue
             return self.mark_target_fun(isomorphic_subgraph)
         return False
 
@@ -104,8 +143,10 @@ class P22(Production):
     def __init__(self):
         super().__init__(get_P22_left())
 
-    def apply(self, graph):
-        matcher = GraphMatcher(graph, self.left, node_match=node_match)
+    def apply(self, graph, node_q=None):
+        node_q.r = True
+        graph.nodes[node_q]["r"] = True
+        '''matcher = GraphMatcher(graph, self.left, node_match=lambda x, _: True)
         for subgraph_nodes in matcher.subgraph_isomorphisms_iter():
             isomorphic_subgraph = graph.subgraph(subgraph_nodes)
             main_nodes = list(filter(lambda node: isinstance(node, NodeQ), list(isomorphic_subgraph.nodes)))
@@ -114,7 +155,7 @@ class P22(Production):
                     graph.nodes[node]["r"] = True
                     node.r = True
             return True
-        return False
+        return False'''
 
 
 P1 = Production(get_P1_left())
