@@ -80,4 +80,3 @@ def add_hyperedge(G, nodes, r):
     add_node(G, hyperedge)
     for node in nodes:
         G.add_edge(hyperedge, node)
-

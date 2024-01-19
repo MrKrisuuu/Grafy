@@ -49,7 +49,7 @@ def get_P2_left():
     e12 = list(G.nodes)[4]
     v = cut_edge(G, v1, v2, e12)
     v.h = True
-    G.nodes[v]['h'] = True
+    G.nodes[v]["h"] = True
     return G
 
 
@@ -57,7 +57,7 @@ def get_P3_left():
     def cut(ver1, ver2, edge):
         v = cut_edge(G, ver1, ver2, edge)
         v.h = True
-        G.nodes[v]['h'] = True
+        G.nodes[v]["h"] = True
 
     G = create_graph_4()
     nodes = list(G.nodes)
@@ -78,7 +78,7 @@ def get_P4_left():
     def cut(ver1, ver2, edge):
         v = cut_edge(G, ver1, ver2, edge)
         v.h = True
-        G.nodes[v]['h'] = True
+        G.nodes[v]["h"] = True
 
     G = create_graph_4()
     nodes = list(G.nodes)
@@ -108,9 +108,9 @@ def get_P7_left():
     return G
 
 
-def mark_target_function(graph_left):
+def mark_target_function(graph_left, index=0):
     nodes = list(graph_left.nodes)
-    q = next(filter(lambda node: isinstance(node, NodeQ), nodes))
+    q = list(filter(lambda node: isinstance(node, NodeQ), nodes))[index]
 
     if q is not None:
         q.r = True
@@ -131,7 +131,7 @@ def get_P10_left():
     e12 = list(G.nodes)[6]
     v = cut_edge(G, v1, v2, e12)
     v.h = True
-    G.nodes[v]['h'] = True
+    G.nodes[v]["h"] = True
     return G
 
 
